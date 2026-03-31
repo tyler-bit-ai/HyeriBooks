@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-03-31T11:49:43.954Z",
-  "totalBooks": 185,
+  "generatedAt": "2026-03-31T12:13:56.005Z",
+  "totalBooks": 245,
   "categories": [
     "역사",
     "과학",
@@ -11,7 +11,7 @@
     "생활/성장",
     "동화/문학"
   ],
-  "uncategorizedCount": 20,
+  "uncategorizedCount": 56,
   "uncategorizedTitles": [
     "소맥거핀 일상 만화. 4",
     "아빠를 구하라",
@@ -32,7 +32,43 @@
     "쿡판다의 수상한 만두카. 3, 너구리 악당이 나타났다!",
     "쿡판다의 수상한 만두카. 2, 쿡판다 학교에 가다!",
     "쿡판다의 수상한 만두카. 1, 주문하신 방귀 만두 나왔습니다!",
-    "다판다 만물 트럭. 3, 사라진 공주"
+    "다판다 만물 트럭. 3, 사라진 공주",
+    "맘대로 피구 규칙",
+    "유도 소녀 강원미",
+    "하얀 아저씨의 특별한 젤리 가게",
+    "하늘 문방구 : 엄마를 만나러 갑니다",
+    "칠판에 딱 붙은 아이들",
+    "슬라임 카페에 입장하시겠습니까?",
+    "두근두근 걱정 대장",
+    "어느 날, 좀비가 되었다 . 1 , 여기는 좀비 학교",
+    "온 더 볼= On the ball. 2, 돌파",
+    "13일의 단톡방",
+    "어느 날, 좀비가 되었다 . 2 , 좀비끼리 왜 이래",
+    "온 더 볼 = On the ball . 1 , 혼성 축구부의 탄생",
+    "진짜 이루다 : 100만 유튜버 루다튜브의 실체",
+    "(지켜 줘요!) 슈법맨 . 2 , 카메라의 두 얼굴",
+    "(지켜 줘요!) 슈법맨 . 3 , 수상한 단톡방의 비밀",
+    "똥볶이 할멈. 7 , 우리가 처음 만난 기적",
+    "운동장 아래 100층 학교 . 1 , 초대 받은 아이들",
+    "[신착] 지옥 초등학교. 3 , 오늘은 소풍 가는 날",
+    "운동장 아래 100층 학교 . 2 , 이름 없는 아이",
+    "[신착] 지옥 초등학교. 4 , 천재 VS 우등생 장난치기 대결",
+    "초코 케이크 도둑",
+    "내 멋대로 초능력 뽑기",
+    "혼공 도사 나대로 : 초등 공부 수련기 . 1 , 혼공계에 빠지다!",
+    "(읽으면서 바로 써먹는) 어린이 수수께끼 : 공포특급",
+    "우리 언니는 두부",
+    "구해줘 카카오프렌즈 경제 . 1",
+    "토깽이네 지구 구출 대작전 . 3 , 거대 괴물로부터 바다를 구하라! : 서바이벌 환경 학습만화",
+    "수상한 할아버지",
+    "(어쩔뚱땡!) 고구마머리 TV . 2 , 우주탐험 2",
+    "Go Go 카카오프렌즈 : 세계 역사 문화 체험 학습만화 . 33 , 필리핀",
+    "[3학년] 이것저것 동물들의 하루",
+    "토깽이네 지구 구출 대작전 : 서바이벌 환경 학습만화 . 7 , 최고의 청소부를 찾아라!",
+    "130층 나무 집",
+    "내 맘대로 선생님 바꾸기 앱",
+    "토깽이네 지구 구출 대작전 : 서바이벌 환경 학습만화 . 2 , 음식물 쓰레기에서 지구를 구하라",
+    "토깽이네 지구 구출 대작전 : 서바이벌 환경 학습만화 . 4 , 깨끗한 공기를 구하라!"
   ],
   "books": [
     {
@@ -270,6 +306,24 @@
       "category": "역사"
     },
     {
+      "title": "어느 날, 노비가 되었다 . 1 , 반짝이는 돌멩이",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "역사"
+    },
+    {
+      "title": "처음 읽는 삼국지 . 1 , 영웅과의 만남",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "역사"
+    },
+    {
+      "title": "처음 읽는 삼국지. 2 , 혼돈에 맞선 자들",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "역사"
+    },
+    {
       "title": "비마이펫 멍냥연구소. 7",
       "library": "성동구립도서관",
       "loanDate": "2026-03-24",
@@ -402,6 +456,36 @@
       "category": "과학"
     },
     {
+      "title": "(슈퍼 초능력 판타지)천재 의사 시건방 . 2 , 새우등 마을을 탈출하라!",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "과학"
+    },
+    {
+      "title": "(슈퍼 초능력 판타지)천재 의사 시건방. 3 , 시작된 어둠의 대결",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "과학"
+    },
+    {
+      "title": "(슈퍼 초능력 판타지)천재 의사 시건방. 1, 깡시골 어벤져스의 비밀",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "과학"
+    },
+    {
+      "title": "(쿠키런) 호기심 과학 상식",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "과학"
+    },
+    {
+      "title": "(새콤달콤)열 단어 과학 캔디 . 1 , 지구과학",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "과학"
+    },
+    {
       "title": "(빨간내복야코) 이거 완전 아사라비아 한자. 1",
       "library": "용답도서관",
       "loanDate": "2026-03-27",
@@ -507,6 +591,12 @@
       "title": "아홉 살 성교육 사전 : 초등 여자아이가 꼭 알아야 할 23가지 몸 이야기. 2, 여자아이 몸",
       "library": "성동구립도서관",
       "loanDate": "2026-01-27",
+      "category": "국어/한자"
+    },
+    {
+      "title": "놓지 마 맞춤법 . 4 , 마지막 고개를 향해!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
       "category": "국어/한자"
     },
     {
@@ -678,6 +768,36 @@
       "category": "학습만화/상식"
     },
     {
+      "title": "쿠키런 킹덤스쿨 : 부자되기 습관 경제 학습만화 . 5 , 통장 군단 vs 카드 병사",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "학습만화/상식"
+    },
+    {
+      "title": "쿠키런 킹덤스쿨 : 부자되기 습관 경제 학습만화 . 6 , 바른 금융 vs 나쁜 금융",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "학습만화/상식"
+    },
+    {
+      "title": "쿠키런 킹덤스쿨 : 부자되기 습관 경제 학습만화 . 3 , 직업 쿠키 vs 백수 쿠키",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "학습만화/상식"
+    },
+    {
+      "title": "쿠키런 어드벤처 . 34 , 홍콩 : 쿠키들의 신나는 세계여행",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "학습만화/상식"
+    },
+    {
+      "title": "쿠키런 어드벤처 . 57 , 외딴 탑의 주인 - 세상의 끝 : 쿠키들의 세계 역사 탐험",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "학습만화/상식"
+    },
+    {
       "title": "(애니메이션 코믹북)엉덩이 탐정. 9, 뿡뿡! 오페라의 괴도",
       "library": "성동구립도서관",
       "loanDate": "2026-03-10",
@@ -735,6 +855,18 @@
       "title": "기량 탐정 사무소. 4, 사라진 블랙의 행방",
       "library": "성동구립도서관",
       "loanDate": "2026-01-09",
+      "category": "추리/미스터리"
+    },
+    {
+      "title": "명탐정 닭다리 탐정 . 3 , 로마에서 사라진 반지",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "추리/미스터리"
+    },
+    {
+      "title": "명탐정 닭다리 탐정 . 2 , 세종대왕의 편지 : 암호를 풀어라!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
       "category": "추리/미스터리"
     },
     {
@@ -918,6 +1050,36 @@
       "category": "판타지/모험"
     },
     {
+      "title": "오지랖 도깨비 오지랑 . 2 , 엄마 좀 바꿔 줘",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "판타지/모험"
+    },
+    {
+      "title": "오지랖 도깨비 오지랑 . 4 , 다시 만난 친구",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "판타지/모험"
+    },
+    {
+      "title": "오지랖 도깨비 오지랑 . 3 , 학교에 간 오지랑",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "판타지/모험"
+    },
+    {
+      "title": "(놀라운)호랑이 빵집 . 4 , 사랑은 어려워!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "판타지/모험"
+    },
+    {
+      "title": "(이상한) 호랑이 빵집 . 3 , 진짜 호 셰프를 찾아라!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "판타지/모험"
+    },
+    {
       "title": "일주일 회장 : 마루비 어린이문학 1",
       "library": "성동구립도서관",
       "loanDate": "2026-03-18",
@@ -963,6 +1125,12 @@
       "title": "내 멋대로 장래희망 뽑기",
       "library": "성동구립도서관",
       "loanDate": "2026-01-08",
+      "category": "생활/성장"
+    },
+    {
+      "title": "배틀 급식왕 . 1 , 좀비 바이러스",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
       "category": "생활/성장"
     },
     {
@@ -1023,6 +1191,18 @@
       "title": "사과 세탁소. 1",
       "library": "무지개도서관",
       "loanDate": "2026-01-11",
+      "category": "동화/문학"
+    },
+    {
+      "title": "고양이 해결사 깜냥 . 1 , 아파트의 평화를 지켜라!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "동화/문학"
+    },
+    {
+      "title": "[북큐] 모두 웃는 장례식: 홍민정 장편동화",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
       "category": "동화/문학"
     },
     {
@@ -1143,6 +1323,222 @@
       "title": "다판다 만물 트럭. 3, 사라진 공주",
       "library": "성동구립도서관",
       "loanDate": "2026-01-08",
+      "category": "uncategorized"
+    },
+    {
+      "title": "맘대로 피구 규칙",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "유도 소녀 강원미",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "하얀 아저씨의 특별한 젤리 가게",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "하늘 문방구 : 엄마를 만나러 갑니다",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "칠판에 딱 붙은 아이들",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "슬라임 카페에 입장하시겠습니까?",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "두근두근 걱정 대장",
+      "library": "단봉늘봄",
+      "loanDate": "2026-01-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "어느 날, 좀비가 되었다 . 1 , 여기는 좀비 학교",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "uncategorized"
+    },
+    {
+      "title": "온 더 볼= On the ball. 2, 돌파",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "uncategorized"
+    },
+    {
+      "title": "13일의 단톡방",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "uncategorized"
+    },
+    {
+      "title": "어느 날, 좀비가 되었다 . 2 , 좀비끼리 왜 이래",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "uncategorized"
+    },
+    {
+      "title": "온 더 볼 = On the ball . 1 , 혼성 축구부의 탄생",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "uncategorized"
+    },
+    {
+      "title": "진짜 이루다 : 100만 유튜버 루다튜브의 실체",
+      "library": "단봉늘봄",
+      "loanDate": "2025-12-14",
+      "category": "uncategorized"
+    },
+    {
+      "title": "(지켜 줘요!) 슈법맨 . 2 , 카메라의 두 얼굴",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "(지켜 줘요!) 슈법맨 . 3 , 수상한 단톡방의 비밀",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "똥볶이 할멈. 7 , 우리가 처음 만난 기적",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "운동장 아래 100층 학교 . 1 , 초대 받은 아이들",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "[신착] 지옥 초등학교. 3 , 오늘은 소풍 가는 날",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "운동장 아래 100층 학교 . 2 , 이름 없는 아이",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "[신착] 지옥 초등학교. 4 , 천재 VS 우등생 장난치기 대결",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "초코 케이크 도둑",
+      "library": "단봉늘봄",
+      "loanDate": "2025-11-23",
+      "category": "uncategorized"
+    },
+    {
+      "title": "내 멋대로 초능력 뽑기",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "uncategorized"
+    },
+    {
+      "title": "혼공 도사 나대로 : 초등 공부 수련기 . 1 , 혼공계에 빠지다!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "uncategorized"
+    },
+    {
+      "title": "(읽으면서 바로 써먹는) 어린이 수수께끼 : 공포특급",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "uncategorized"
+    },
+    {
+      "title": "우리 언니는 두부",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "uncategorized"
+    },
+    {
+      "title": "구해줘 카카오프렌즈 경제 . 1",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-26",
+      "category": "uncategorized"
+    },
+    {
+      "title": "토깽이네 지구 구출 대작전 . 3 , 거대 괴물로부터 바다를 구하라! : 서바이벌 환경 학습만화",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "uncategorized"
+    },
+    {
+      "title": "수상한 할아버지",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "uncategorized"
+    },
+    {
+      "title": "(어쩔뚱땡!) 고구마머리 TV . 2 , 우주탐험 2",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-11",
+      "category": "uncategorized"
+    },
+    {
+      "title": "Go Go 카카오프렌즈 : 세계 역사 문화 체험 학습만화 . 33 , 필리핀",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "[3학년] 이것저것 동물들의 하루",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "토깽이네 지구 구출 대작전 : 서바이벌 환경 학습만화 . 7 , 최고의 청소부를 찾아라!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "130층 나무 집",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "내 맘대로 선생님 바꾸기 앱",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "토깽이네 지구 구출 대작전 : 서바이벌 환경 학습만화 . 2 , 음식물 쓰레기에서 지구를 구하라",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
+      "category": "uncategorized"
+    },
+    {
+      "title": "토깽이네 지구 구출 대작전 : 서바이벌 환경 학습만화 . 4 , 깨끗한 공기를 구하라!",
+      "library": "단봉늘봄",
+      "loanDate": "2025-10-04",
       "category": "uncategorized"
     }
   ]

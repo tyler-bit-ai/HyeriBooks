@@ -4,10 +4,26 @@ import { fileURLToPath } from 'node:url';
 import type { BooksData, NormalizedBook } from '../src/types/book';
 
 const SPREADSHEET_ID = '1neklDf3wD5Cncy8F_k0-zdH6CHCHgkat6N4EscLb--A';
-const SHEET_GID = '0';
-const SOURCE_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+const SHEETS = [
+  {
+    gid: '0',
+    aliases: {
+      title: ['도서명'],
+      library: ['도서관'],
+      loanDate: ['대출일자'],
+    },
+  },
+  {
+    gid: '474010460',
+    aliases: {
+      title: ['도서정보'],
+      library: ['소장도서관'],
+      loanDate: ['대출일'],
+    },
+  },
+] as const;
 
-const REQUIRED_HEADERS = ['도서관', '도서명', '대출일자'] as const;
+const SOURCE_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`;
 
 function parseCsv(input: string): string[][] {
   const rows: string[][] = [];
@@ -59,10 +75,15 @@ function parseCsv(input: string): string[][] {
 }
 
 function normalizeDate(value: string): string {
-  const trimmed = value.trim();
+  const trimmed = value.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
   const dashMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (dashMatch) {
     return trimmed;
+  }
+
+  const slashMatch = trimmed.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+  if (slashMatch) {
+    return `${slashMatch[1]}-${slashMatch[2]}-${slashMatch[3]}`;
   }
 
   const dotMatch = trimmed.match(/^(\d{4})\.(\d{2})\.(\d{2})$/);
@@ -73,10 +94,29 @@ function normalizeDate(value: string): string {
   throw new Error(`Unsupported loan date format: ${value}`);
 }
 
-function normalizeBook(row: string[], headerMap: Map<string, number>): NormalizedBook {
-  const library = row[headerMap.get('도서관') ?? -1]?.trim() ?? '';
-  const title = row[headerMap.get('도서명') ?? -1]?.trim() ?? '';
-  const loanDate = row[headerMap.get('대출일자') ?? -1]?.trim() ?? '';
+function findHeaderIndex(headerMap: Map<string, number>, aliases: readonly string[]): number {
+  for (const alias of aliases) {
+    const index = headerMap.get(alias);
+    if (index !== undefined) {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+function normalizeBook(
+  row: string[],
+  headerMap: Map<string, number>,
+  aliases: {
+    title: readonly string[];
+    library: readonly string[];
+    loanDate: readonly string[];
+  },
+): NormalizedBook {
+  const library = row[findHeaderIndex(headerMap, aliases.library)]?.trim() ?? '';
+  const title = row[findHeaderIndex(headerMap, aliases.title)]?.trim() ?? '';
+  const loanDate = row[findHeaderIndex(headerMap, aliases.loanDate)]?.trim() ?? '';
 
   if (!library || !title || !loanDate) {
     throw new Error(`Missing required book fields in row: ${JSON.stringify(row)}`);
@@ -90,29 +130,37 @@ function normalizeBook(row: string[], headerMap: Map<string, number>): Normalize
 }
 
 async function main() {
-  const response = await fetch(SOURCE_URL);
+  const books = (
+    await Promise.all(
+      SHEETS.map(async (sheet) => {
+        const exportUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${sheet.gid}`;
+        const response = await fetch(exportUrl);
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch sheet CSV: ${response.status} ${response.statusText}`);
-  }
+        if (!response.ok) {
+          throw new Error(`Failed to fetch sheet CSV: ${response.status} ${response.statusText}`);
+        }
 
-  const csv = await response.text();
-  const rows = parseCsv(csv);
+        const csv = await response.text();
+        const rows = parseCsv(csv);
 
-  if (rows.length < 2) {
-    throw new Error('Sheet CSV does not contain enough rows to normalize.');
-  }
+        if (rows.length < 2) {
+          return [];
+        }
 
-  const headers = rows[0].map((header) => header.trim());
-  const headerMap = new Map(headers.map((header, index) => [header, index]));
+        const headers = rows[0].map((header) => header.replace(/[\u200B-\u200D\uFEFF]/g, '').trim());
+        const headerMap = new Map(headers.map((header, index) => [header, index]));
 
-  for (const requiredHeader of REQUIRED_HEADERS) {
-    if (!headerMap.has(requiredHeader)) {
-      throw new Error(`Required header is missing: ${requiredHeader}`);
-    }
-  }
+        for (const [fieldName, fieldAliases] of Object.entries(sheet.aliases)) {
+          if (findHeaderIndex(headerMap, fieldAliases) < 0) {
+            throw new Error(`Required header is missing for ${fieldName}: ${fieldAliases.join(', ')}`);
+          }
+        }
 
-  const books = rows.slice(1).map((row) => normalizeBook(row, headerMap));
+        return rows.slice(1).map((row) => normalizeBook(row, headerMap, sheet.aliases));
+      }),
+    )
+  ).flat();
+
   books.sort((left, right) => right.loanDate.localeCompare(left.loanDate));
 
   const output: BooksData = {
