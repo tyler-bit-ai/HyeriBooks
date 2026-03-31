@@ -1,113 +1,281 @@
-import { useState } from 'react';
-import categorizedBooksData from '../data/categorized-books.json';
-import { BookCard } from './components/BookCard';
-import { CategorySection } from './components/CategorySection';
-import { SummaryCard } from './components/SummaryCard';
-import type { CategorizedBook, CategorizedBooksData } from './types/book';
+import { useMemo, useState } from 'react';
+import booksDataRaw from '../data/books.json';
+import type { BooksData, NormalizedBook } from './types/book';
 
-const data = categorizedBooksData as CategorizedBooksData;
+const booksData = booksDataRaw as BooksData;
 
-const numberFormatter = new Intl.NumberFormat('ko-KR');
+type MinorGroup = {
+  minorName: string;
+  books: NormalizedBook[];
+};
 
-function filterBooks(books: CategorizedBook[], query: string) {
-  const normalizedQuery = query.trim().toLowerCase();
+type MajorGroup = {
+  majorName: string;
+  minorGroups: MinorGroup[];
+  totalBooks: number;
+};
 
-  if (!normalizedQuery) {
-    return books;
+type FranchiseRule = {
+  majorName: string;
+  keywords: string[];
+};
+
+const franchiseRules: FranchiseRule[] = [
+  { majorName: '설민석', keywords: ['설민석'] },
+  { majorName: '흔한남매', keywords: ['흔한남매'] },
+  { majorName: '빨간내복야코', keywords: ['빨간내복야코', '야코'] },
+  { majorName: '슈뻘맨', keywords: ['슈뻘맨'] },
+  { majorName: '백앤아', keywords: ['백앤아'] },
+  { majorName: '춘식이 with 라이언', keywords: ['춘식이 with 라이언', '춘식이'] },
+  { majorName: '비밀요원 레너드', keywords: ['비밀요원 레너드', '레너드'] },
+  { majorName: '쿠키런', keywords: ['쿠키런'] },
+  { majorName: '무적 이순신', keywords: ['무적 이순신'] },
+  { majorName: '제철용사 한딸기', keywords: ['제철용사 한딸기'] },
+];
+
+function parseVolume(title: string): number | null {
+  const volumePatterns = [
+    /\.\s*(\d+)(?:\s|,|$)/,
+    /\s(\d+)\s*-\s*/,
+    /\s(\d+)(?:\s|:|$)/,
+  ];
+
+  for (const pattern of volumePatterns) {
+    const match = title.match(pattern);
+    if (match) {
+      return Number.parseInt(match[1], 10);
+    }
   }
 
-  return books.filter((book) => {
-    const haystack = `${book.title} ${book.library} ${book.category}`.toLowerCase();
-    return haystack.includes(normalizedQuery);
-  });
+  return null;
+}
+
+function normalizeText(value: string): string {
+  return value
+    .replace(/[()]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getMajorName(title: string): string {
+  const normalizedTitle = normalizeText(title);
+
+  for (const rule of franchiseRules) {
+    if (rule.keywords.some((keyword) => normalizedTitle.includes(keyword))) {
+      return rule.majorName;
+    }
+  }
+
+  return '기타';
+}
+
+function getMinorName(title: string): string {
+  const normalizedTitle = normalizeText(title);
+
+  const volumePatterns = [
+    /^(.*?)(?:\.\s*\d+)(?:\s*[,:-].*)?$/,
+    /^(.*?)(?:\s+\d+\s*-\s*.*)$/,
+    /^(.*?)(?:\s+\d+)(?:\s*:\s*.*)?$/,
+  ];
+
+  for (const pattern of volumePatterns) {
+    const match = normalizedTitle.match(pattern);
+    if (match?.[1]) {
+      return normalizeText(match[1]);
+    }
+  }
+
+  return normalizedTitle.replace(/[,:-]\s.*$/, '').trim() || normalizedTitle;
+}
+
+function compareBooks(left: NormalizedBook, right: NormalizedBook): number {
+  const leftVolume = parseVolume(left.title);
+  const rightVolume = parseVolume(right.title);
+
+  if (leftVolume !== null && rightVolume !== null && leftVolume !== rightVolume) {
+    return leftVolume - rightVolume;
+  }
+
+  if (left.loanDate !== right.loanDate) {
+    return right.loanDate.localeCompare(left.loanDate);
+  }
+
+  return left.title.localeCompare(right.title, 'ko');
+}
+
+function buildGroups(books: NormalizedBook[]): MajorGroup[] {
+  const majorMap = new Map<string, Map<string, NormalizedBook[]>>();
+
+  for (const book of books) {
+    const majorName = getMajorName(book.title);
+    const minorName = getMinorName(book.title);
+
+    const minorMap = majorMap.get(majorName) ?? new Map<string, NormalizedBook[]>();
+    const currentBooks = minorMap.get(minorName) ?? [];
+    currentBooks.push(book);
+    minorMap.set(minorName, currentBooks);
+    majorMap.set(majorName, minorMap);
+  }
+
+  return [...majorMap.entries()]
+    .map(([majorName, minorMap]) => {
+      const minorGroups = [...minorMap.entries()]
+        .map(([minorName, groupedBooks]) => ({
+          minorName,
+          books: [...groupedBooks].sort(compareBooks),
+        }))
+        .sort((left, right) => {
+          const leftLatest = left.books[0]?.loanDate ?? '';
+          const rightLatest = right.books[0]?.loanDate ?? '';
+
+          if (leftLatest !== rightLatest) {
+            return rightLatest.localeCompare(leftLatest);
+          }
+
+          return left.minorName.localeCompare(right.minorName, 'ko');
+        });
+
+      return {
+        majorName,
+        minorGroups,
+        totalBooks: minorGroups.reduce((sum, group) => sum + group.books.length, 0),
+      };
+    })
+    .sort((left, right) => {
+      if (left.majorName === '기타') {
+        return 1;
+      }
+
+      if (right.majorName === '기타') {
+        return -1;
+      }
+
+      const leftLatest = left.minorGroups[0]?.books[0]?.loanDate ?? '';
+      const rightLatest = right.minorGroups[0]?.books[0]?.loanDate ?? '';
+
+      if (leftLatest !== rightLatest) {
+        return rightLatest.localeCompare(leftLatest);
+      }
+
+      return left.majorName.localeCompare(right.majorName, 'ko');
+    });
 }
 
 function App() {
   const [query, setQuery] = useState('');
-  const visibleBooks = filterBooks(data.books, query);
-  const libraries = new Set(visibleBooks.map((book) => book.library));
-  const latestLoanDate = visibleBooks[0]?.loanDate ?? '-';
-  const groupedBooks = data.categories.map((category) => ({
-    category,
-    books: visibleBooks.filter((book) => book.category === category),
-  })).filter(({ books }) => books.length > 0);
-  const uncategorizedBooks = visibleBooks.filter((book) => book.category === 'uncategorized');
+  const [libraryFilter, setLibraryFilter] = useState('all');
+
+  const libraries = useMemo(
+    () => [...new Set(booksData.books.map((book) => book.library))].sort((left, right) => left.localeCompare(right, 'ko')),
+    [],
+  );
+
+  const filteredBooks = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    return booksData.books.filter((book) => {
+      const matchesQuery =
+        normalizedQuery.length === 0 ||
+        `${book.title} ${book.library}`.toLowerCase().includes(normalizedQuery);
+      const matchesLibrary = libraryFilter === 'all' || book.library === libraryFilter;
+
+      return matchesQuery && matchesLibrary;
+    });
+  }, [libraryFilter, query]);
+
+  const majorGroups = useMemo(() => buildGroups(filteredBooks), [filteredBooks]);
+  const minorGroupCount = useMemo(
+    () => majorGroups.reduce((sum, group) => sum + group.minorGroups.length, 0),
+    [majorGroups],
+  );
 
   return (
     <main className="page-shell">
-      <section className="hero-panel">
-        <div className="hero-copy">
-          <p className="eyebrow">Hyeri Books Dashboard</p>
-          <h1>혜리가 읽은 책을 종류별로 한 번에 보는 대시보드</h1>
-          <p className="hero-summary">
-            원본 Google Spreadsheet에서 읽은 책 목록을 가져와 정규화하고,
-            분류 규칙을 적용해 카테고리별로 묶었습니다. 카드에는 도서명,
-            도서관, 대출일자만 남겨 스캔 속도를 높였습니다.
-          </p>
+      <header className="page-header">
+        <div>
+          <p className="eyebrow">Hyeri Books</p>
+          <h1>혜리가 읽은 책</h1>
         </div>
 
-        <div className="hero-search">
-          <label className="search-label" htmlFor="dashboard-search">
-            제목, 도서관, 카테고리 검색
+        <div className="filter-bar">
+          <label className="filter-field">
+            <span>검색</span>
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="제목 또는 도서관"
+            />
           </label>
-          <input
-            id="dashboard-search"
-            className="search-input"
-            type="search"
-            placeholder="예: 삼국지, 성동구립도서관, 과학"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <p className="search-note">
-            입력한 키워드에 맞는 책만 남도록 제목, 도서관, 카테고리를 함께
-            필터링합니다.
-          </p>
-        </div>
-      </section>
 
-      <section className="summary-grid" aria-label="대시보드 요약">
-        <SummaryCard label="총 읽은 책" value={`${numberFormatter.format(visibleBooks.length)}권`} />
-        <SummaryCard label="분류 수" value={`${numberFormatter.format(data.categories.length)}개`} />
-        <SummaryCard label="최근 대출일" value={latestLoanDate} />
-        <SummaryCard label="이용 도서관" value={`${numberFormatter.format(libraries.size)}곳`} />
-      </section>
-
-      <section className="content-layout">
-        <div className="category-column">
-          {groupedBooks.map(({ category, books }) => (
-            <CategorySection key={category} category={category} count={books.length}>
-              {books.map((book) => (
-                <BookCard key={`${book.title}-${book.library}-${book.loanDate}`} book={book} />
+          <label className="filter-field">
+            <span>도서관</span>
+            <select value={libraryFilter} onChange={(event) => setLibraryFilter(event.target.value)}>
+              <option value="all">전체</option>
+              {libraries.map((library) => (
+                <option key={library} value={library}>
+                  {library}
+                </option>
               ))}
-            </CategorySection>
-          ))}
+            </select>
+          </label>
         </div>
+      </header>
 
-        <aside className="side-panel">
-          <section className="status-card">
-            <p className="side-eyebrow">분류 상태</p>
-            <h2>미분류 {numberFormatter.format(uncategorizedBooks.length)}권</h2>
-            <p>
-              아직 규칙에 걸리지 않은 책은 숨기지 않고 별도 목록으로 남깁니다.
-              이후 `category-mapping.json` 또는 원본 시트의 `category` 컬럼으로
-              보강할 수 있습니다.
-            </p>
-          </section>
+      <section className="list-summary" aria-label="리스트 요약">
+        <strong>{filteredBooks.length}권</strong>
+        <span>{majorGroups.length}개 대분류</span>
+        <span>{minorGroupCount}개 중분류</span>
+      </section>
 
-          <section className="uncategorized-list">
-            {uncategorizedBooks.length === 0 ? (
-              <p className="empty-state">모든 책이 현재 카테고리 안에 포함되어 있습니다.</p>
-            ) : (
-              uncategorizedBooks.map((book) => (
-                <BookCard
-                  key={`uncategorized-${book.title}-${book.loanDate}`}
-                  book={book}
-                  compact
-                />
-              ))
-            )}
+      <section className="major-list" aria-label="읽은 책 리스트">
+        {majorGroups.map((majorGroup) => (
+          <section key={majorGroup.majorName} className="major-group">
+            <header className="major-header">
+              <div>
+                <p className="major-kicker">대분류</p>
+                <h2>{majorGroup.majorName}</h2>
+              </div>
+              <span>{majorGroup.totalBooks}권</span>
+            </header>
+
+            <div className="minor-list">
+              {majorGroup.minorGroups.map((minorGroup) => (
+                <section key={`${majorGroup.majorName}-${minorGroup.minorName}`} className="series-group">
+                  <header className="series-header">
+                    <div>
+                      <p className="minor-kicker">중분류</p>
+                      <h3>{minorGroup.minorName}</h3>
+                    </div>
+                    <span>{minorGroup.books.length}권</span>
+                  </header>
+
+                  <div className="list-table" role="table" aria-label={minorGroup.minorName}>
+                    <div className="list-head" role="row">
+                      <span role="columnheader">제목</span>
+                      <span role="columnheader">대출일</span>
+                      <span role="columnheader">도서관</span>
+                    </div>
+
+                    {minorGroup.books.map((book) => (
+                      <div
+                        key={`${majorGroup.majorName}-${minorGroup.minorName}-${book.title}-${book.loanDate}-${book.library}`}
+                        className="list-row"
+                        role="row"
+                      >
+                        <span role="cell" className="title-cell">
+                          {book.title}
+                        </span>
+                        <span role="cell">{book.loanDate}</span>
+                        <span role="cell">{book.library}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
           </section>
-        </aside>
+        ))}
       </section>
     </main>
   );
