@@ -1,0 +1,26 @@
+{
+  "name": "hyeri-books-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "fetch-data": "tsx scripts/fetch-books-data.ts",
+    "categorize-data": "tsx scripts/categorize-books.ts",
+    "sync-data": "npm run fetch-data && npm run categorize-data",
+    "build": "npm run sync-data && tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "typescript": "^5.9.2",
+    "tsx": "^4.20.5",
+    "vite": "^7.1.3"
+  }
+}

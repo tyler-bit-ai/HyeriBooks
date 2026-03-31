@@ -1,0 +1,271 @@
+:root {
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  color: #1f2b2b;
+  background:
+    radial-gradient(circle at top left, rgba(255, 207, 122, 0.45), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(124, 169, 180, 0.18), transparent 28%),
+    linear-gradient(180deg, #f8f2e8 0%, #efe5d4 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 32px 18px 64px;
+}
+
+.hero-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.hero-copy,
+.hero-search,
+.summary-card,
+.category-section,
+.status-card,
+.book-card {
+  background: rgba(255, 252, 247, 0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(122, 83, 33, 0.11);
+  box-shadow: 0 18px 45px rgba(84, 55, 26, 0.1);
+}
+
+.hero-copy {
+  padding: 32px;
+  border-radius: 30px;
+}
+
+.hero-search {
+  padding: 26px;
+  border-radius: 30px;
+}
+
+.eyebrow,
+.category-kicker,
+.side-eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #925713;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 4vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.hero-summary,
+.hero-search p,
+.status-card p,
+.empty-state {
+  margin: 16px 0 0;
+  color: #526060;
+  line-height: 1.6;
+}
+
+.search-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid rgba(90, 105, 105, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.85);
+  font: inherit;
+}
+
+.search-note {
+  font-size: 0.92rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.summary-card {
+  padding: 22px 24px;
+  border-radius: 24px;
+}
+
+.summary-card p {
+  margin: 0;
+  color: #5b6867;
+  font-size: 0.92rem;
+}
+
+.summary-card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(1.6rem, 2vw, 2.4rem);
+  line-height: 1;
+}
+
+.content-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.category-column {
+  display: grid;
+  gap: 18px;
+}
+
+.category-section {
+  padding: 24px;
+  border-radius: 28px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(95, 113, 113, 0.12);
+}
+
+.category-header h2,
+.status-card h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.category-header strong {
+  font-size: 1rem;
+  color: #6d4616;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.book-card {
+  padding: 18px;
+  border-radius: 22px;
+}
+
+.book-card.compact {
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.book-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.book-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.book-card dl div {
+  display: grid;
+  gap: 4px;
+}
+
+.book-card dt {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #8e6127;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.book-card dd {
+  margin: 0;
+  color: #4c5959;
+  font-size: 0.93rem;
+}
+
+.side-panel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.status-card {
+  padding: 24px;
+  border-radius: 28px;
+}
+
+.uncategorized-list {
+  display: grid;
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .hero-panel,
+  .content-layout,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .side-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    padding: 20px 14px 42px;
+  }
+
+  .hero-copy,
+  .hero-search,
+  .summary-card,
+  .category-section,
+  .status-card,
+  .book-card {
+    border-radius: 20px;
+  }
+
+  .hero-copy,
+  .hero-search,
+  .summary-card,
+  .category-section,
+  .status-card {
+    padding: 18px;
+  }
+
+  .books-grid {
+    grid-template-columns: 1fr;
+  }
+}
