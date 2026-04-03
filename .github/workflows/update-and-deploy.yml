@@ -39,6 +39,8 @@ jobs:
 
       - name: Build site with latest sheet data
         run: npm run build
+        env:
+          VITE_WISHLIST_API_URL: ${{ vars.VITE_WISHLIST_API_URL }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -56,4 +58,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
