@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { BooksData, NormalizedBook } from '../src/types/book';
+import type { BooksData, NormalizedBook, WishlistData, WishlistItem, WishlistStatus } from '../src/types/book';
 
 const SPREADSHEET_ID = '1neklDf3wD5Cncy8F_k0-zdH6CHCHgkat6N4EscLb--A';
 const SHEETS = [
@@ -24,6 +24,17 @@ const SHEETS = [
 ] as const;
 
 const SOURCE_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`;
+const WISHLIST_SHEET = {
+  gid: '738709611',
+  aliases: {
+    id: ['id'],
+    title: ['title'],
+    note: ['note'],
+    status: ['status'],
+    createdAt: ['createdAt'],
+    updatedAt: ['updatedAt'],
+  },
+} as const;
 
 function parseCsv(input: string): string[][] {
   const rows: string[][] = [];
@@ -94,6 +105,17 @@ function normalizeDate(value: string): string {
   throw new Error(`Unsupported loan date format: ${value}`);
 }
 
+function normalizeTimestamp(value: string): string {
+  const trimmed = value.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+  const parsed = Date.parse(trimmed);
+
+  if (Number.isNaN(parsed)) {
+    throw new Error(`Unsupported timestamp format: ${value}`);
+  }
+
+  return new Date(parsed).toISOString();
+}
+
 function findHeaderIndex(headerMap: Map<string, number>, aliases: readonly string[]): number {
   for (const alias of aliases) {
     const index = headerMap.get(alias);
@@ -126,6 +148,49 @@ function normalizeBook(
     title,
     library,
     loanDate: normalizeDate(loanDate),
+  };
+}
+
+function normalizeWishlistStatus(value: string): WishlistStatus {
+  const normalized = value.trim().toLowerCase();
+
+  if (normalized === 'wishlist' || normalized === 'done' || normalized === 'archived') {
+    return normalized;
+  }
+
+  throw new Error(`Unsupported wishlist status: ${value}`);
+}
+
+function normalizeWishlistItem(
+  row: string[],
+  headerMap: Map<string, number>,
+  aliases: {
+    id: readonly string[];
+    title: readonly string[];
+    note: readonly string[];
+    status: readonly string[];
+    createdAt: readonly string[];
+    updatedAt: readonly string[];
+  },
+): WishlistItem {
+  const id = row[findHeaderIndex(headerMap, aliases.id)]?.trim() ?? '';
+  const title = row[findHeaderIndex(headerMap, aliases.title)]?.trim() ?? '';
+  const note = row[findHeaderIndex(headerMap, aliases.note)]?.trim() ?? '';
+  const status = row[findHeaderIndex(headerMap, aliases.status)]?.trim() ?? '';
+  const createdAt = row[findHeaderIndex(headerMap, aliases.createdAt)]?.trim() ?? '';
+  const updatedAt = row[findHeaderIndex(headerMap, aliases.updatedAt)]?.trim() ?? '';
+
+  if (!id || !title || !status || !createdAt || !updatedAt) {
+    throw new Error(`Missing required wishlist fields in row: ${JSON.stringify(row)}`);
+  }
+
+  return {
+    id,
+    title,
+    note,
+    status: normalizeWishlistStatus(status),
+    createdAt: normalizeTimestamp(createdAt),
+    updatedAt: normalizeTimestamp(updatedAt),
   };
 }
 
@@ -163,11 +228,51 @@ async function main() {
 
   books.sort((left, right) => right.loanDate.localeCompare(left.loanDate));
 
+  const wishlistResponse = await fetch(
+    `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${WISHLIST_SHEET.gid}`,
+  );
+
+  if (!wishlistResponse.ok) {
+    throw new Error(`Failed to fetch wishlist sheet CSV: ${wishlistResponse.status} ${wishlistResponse.statusText}`);
+  }
+
+  const wishlistCsv = await wishlistResponse.text();
+  const wishlistRows = parseCsv(wishlistCsv);
+  let wishlist: WishlistData = {
+    sheetName: '읽을책',
+    columns: ['id', 'title', 'note', 'status', 'createdAt', 'updatedAt'],
+    items: [],
+  };
+
+  if (wishlistRows.length > 0) {
+    const headers = wishlistRows[0].map((header) => header.replace(/[\u200B-\u200D\uFEFF]/g, '').trim());
+    const headerMap = new Map(headers.map((header, index) => [header, index]));
+
+    for (const [fieldName, fieldAliases] of Object.entries(WISHLIST_SHEET.aliases)) {
+      if (findHeaderIndex(headerMap, fieldAliases) < 0) {
+        throw new Error(`Required wishlist header is missing for ${fieldName}: ${fieldAliases.join(', ')}`);
+      }
+    }
+
+    const items = wishlistRows
+      .slice(1)
+      .filter((row) => row.some((value) => value.trim() !== ''))
+      .map((row) => normalizeWishlistItem(row, headerMap, WISHLIST_SHEET.aliases))
+      .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+
+    wishlist = {
+      sheetName: '읽을책',
+      columns: ['id', 'title', 'note', 'status', 'createdAt', 'updatedAt'],
+      items,
+    };
+  }
+
   const output: BooksData = {
     sourceUrl: SOURCE_URL,
     generatedAt: new Date().toISOString(),
     totalBooks: books.length,
     books,
+    wishlist,
   };
 
   const currentFilePath = fileURLToPath(import.meta.url);

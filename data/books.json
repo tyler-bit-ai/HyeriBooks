@@ -1,6 +1,6 @@
 {
   "sourceUrl": "https://docs.google.com/spreadsheets/d/1neklDf3wD5Cncy8F_k0-zdH6CHCHgkat6N4EscLb--A/edit",
-  "generatedAt": "2026-03-31T12:13:54.733Z",
+  "generatedAt": "2026-04-03T00:50:29.667Z",
   "totalBooks": 245,
   "books": [
     {
@@ -1228,5 +1228,17 @@
       "library": "단봉늘봄",
       "loanDate": "2025-10-04"
     }
-  ]
+  ],
+  "wishlist": {
+    "sheetName": "읽을책",
+    "columns": [
+      "id",
+      "title",
+      "note",
+      "status",
+      "createdAt",
+      "updatedAt"
+    ],
+    "items": []
+  }
 }
